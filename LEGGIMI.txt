@@ -1,0 +1,23 @@
+FILE TRANSFER - progetto in C per Windows (Winsock)
+
+COMPILARE (Visual Studio):
+  1. Apri "x64 Native Tools Command Prompt for VS" dal menu Start
+  2. cd nella cartella del progetto
+  3. build_msvc.bat
+
+COMPILARE (MinGW/gcc):
+  build.bat
+
+USARE:
+  Sul PC ricevente:   server.exe 5000
+  Sul PC che invia:   client.exe <ip-del-server> 5000 <file>
+  I file ricevuti finiscono nella cartella "received" accanto al server.
+  Prima prova con 127.0.0.1 sullo stesso PC.
+  Al primo avvio il firewall di Windows puo' chiedere il permesso: consenti la rete privata.
+
+VISUAL STUDIO CODE:
+  Apri la cartella in VS Code, poi:
+  - Ctrl+Shift+B  -> compila (build_vscode.bat trova da solo il compilatore di Visual Studio)
+  - Terminal > Run Task > "Avvia server"   (resta in ascolto)
+  - Terminal > Run Task > "Avvia client"   (chiede IP e file)
+  Serve l'estensione "C/C++" di Microsoft.
