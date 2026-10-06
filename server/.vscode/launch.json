@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Avvia server_http.exe",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/server_http.exe",
+      "args": ["5000"],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "Compila (MSVC)",
+      "console": "externalTerminal",
+      "stopAtEntry": false
+    }
+  ]
+}

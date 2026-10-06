@@ -1,0 +1,29 @@
+SERVER C - versione standalone e motore integrato in Tauri
+
+Il server C contiene il motore HTTP usato dal pannello Tauri.
+
+FILE PRINCIPALI
+  network.c/.h       WinSock e funzioni di rete
+  http.c/.h           parsing HTTP, file statici e upload
+  httpserver.c/.h     socket in ascolto e thread
+  server_http.c       piccolo main per eseguire il server separatamente
+
+VERSIONE STANDALONE (DEBUG)
+  Apri un "x64 Native Tools Command Prompt for VS" nella cartella server e:
+    build_msvc.bat
+    server_http.exe 5000
+
+Oppure:
+  avvia.bat
+
+Questa versione standalone usa:
+  server/public/
+  server/received/
+
+VERSIONE DESKTOP
+  Il pannello Tauri NON avvia server_http.exe.
+  Rust collega direttamente httpserver.c e chiama:
+    http_server_start_with_dirs(port, web_dir, upload_dir)
+
+  In questo modo il server C viene incorporato nel programma Tauri e non
+  appare nessuna finestra console quando usi l'app compilata.
