@@ -165,6 +165,42 @@ h2 {
   font-size: 13px;
 }
 
+.qr-panel {
+  margin-top: 4px;
+  padding-top: 15px;
+  border-top: 1px solid #e7edf3;
+  text-align: center;
+}
+
+.qr-title {
+  margin-bottom: 8px;
+  color: #55708d;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.qr-code {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(30, 55, 80, 0.08);
+}
+
+.qr-code svg {
+  display: block;
+}
+
+.qr-hint {
+  margin-top: 7px;
+  color: #7a8797;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
 .address-box {
   display: flex;
   align-items: center;
