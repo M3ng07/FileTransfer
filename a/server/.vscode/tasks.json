@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compila (MSVC)",
+      "type": "shell",
+      "command": ".\\build.bat",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Avvia server HTTP",
+      "type": "shell",
+      "command": ".\\server_http.exe 5000",
+      "dependsOn": "Compila (MSVC)",
+      "problemMatcher": []
+    }
+  ]
+}

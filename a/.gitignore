@@ -1,0 +1,7 @@
+# Escludi le dipendenze di Node.js (in qualsiasi sottocartella)
+**/node_modules/
+node_modules/
+
+# Escludi la cartella di compilazione di Rust (in qualsiasi sottocartella)
+**/target/
+target/

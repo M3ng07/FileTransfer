@@ -1,0 +1,18 @@
+WEB (React + TypeScript) - interfaccia di invio file
+
+Contiene SOLO il sorgente della pagina. Non genera da sola un
+programma eseguibile: va compilata e poi servita dal progetto "server".
+
+SVILUPPO (vedere la pagina nel browser mentre la modifichi):
+  npm install
+  npm run dev
+  Apri l'indirizzo stampato da Vite (es. http://localhost:5173)
+  In questa modalita' l'IP del server va scritto a mano nel campo
+  apposito, perche' la pagina non e' servita dal PC che ospita il server.
+
+USARLA DAVVERO CON IL SERVER C:
+  Dalla cartella principale del progetto (quella sopra "web" e "server"):
+    sync-web.bat
+  Compila la pagina e la copia in server/public. Poi avvii server_http.exe
+  come spiegato in server/LEGGIMI.txt: la pagina sara' raggiungibile da
+  http://<ip-del-pc>:5000, indirizzo e porta gia' precompilati da sola.

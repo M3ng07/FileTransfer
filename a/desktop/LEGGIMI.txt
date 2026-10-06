@@ -1,0 +1,59 @@
+DESKTOP (Tauri + Rust + React/TypeScript) - pannello di controllo
+
+Questa versione NON usa piu' server_http.exe come processo esterno.
+Il server C (network.c, http.c, httpserver.c) viene compilato direttamente
+nel backend Rust/Tauri tramite la crate cc.
+
+STRUTTURA
+  server/     motore C e pagina web compilata per l'iPad
+  web/        sorgenti React/TypeScript della pagina iPad
+  desktop/    pannello Tauri + React/TypeScript
+
+AVVIO IN SVILUPPO
+  Dalla cartella desktop:
+    npm install
+    npm run tauri dev
+
+In sviluppo il server C usa direttamente server/public.
+
+CREARE IL PROGRAMMA WINDOWS
+  Dalla cartella desktop:
+    npm run tauri build
+
+Il build produce il binario in:
+  desktop/src-tauri/target/release/
+
+Gli installer vengono prodotti in:
+  desktop/src-tauri/target/release/bundle/nsis/
+  desktop/src-tauri/target/release/bundle/msi/
+
+COME FUNZIONA IL SERVER
+  - React chiama invoke("start_server")
+  - Rust chiama direttamente http_server_start_with_dirs() nel codice C
+  - il C server usa la pagina bundled in public/
+  - i file ricevuti vengono salvati nella cartella dati dell'app:
+      %LOCALAPPDATA%\com.mengo.filetransfer\received
+    (il percorso preciso puo' dipendere dalla configurazione di Windows/Tauri)
+
+NON SERVE PIU'
+  - selezionare server_http.exe
+  - avviare un terminale per il server
+  - copiare received accanto al file .exe
+
+IL SERVER STANDALONE RESTA DISPONIBILE
+  server/server_http.c e i .bat restano nel progetto per fare debug del
+  server C separatamente dalla GUI.
+
+PRIMA DI CREARE L'INSTALLER
+  Dalla cartella principale esegui sync-web.bat per aggiornare server/public
+  con l'ultima build della pagina web.
+  Poi:
+    cd desktop
+    npm install
+    npm run tauri build
+
+REQUISITI WINDOWS
+  - Node.js
+  - Rust + cargo
+  - Visual Studio Build Tools con sviluppo desktop C++
+  - WebView2, normalmente gia' presente su Windows 10/11 aggiornati
