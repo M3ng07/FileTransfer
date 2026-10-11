@@ -31,6 +31,11 @@ typedef struct {
 
 static int copy_dir(char *dst, size_t dst_size, const char *src) {
     if (!src || src[0] == '\0') return -1;
+
+    /* Tauri su Windows puo' passare percorsi "verbatim" (\\?\C:\...):
+       in quel formato '/' non viene convertito in '\', quindi lo tolgo. */
+    if (strncmp(src, "\\\\?\\", 4) == 0) src += 4;
+
     size_t len = strlen(src);
     if (len >= dst_size) return -1;
     memcpy(dst, src, len + 1);

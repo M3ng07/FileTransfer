@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
+import { QRCodeSVG } from "qrcode.react";
 import "./App";
 
 interface FileEntry {
@@ -183,6 +184,24 @@ export default function App() {
             <span>FILE</span>
             <strong>{files.length}</strong>
           </div>
+
+          {running && address && (
+            <div className="qr-panel">
+              <div className="qr-title">SCANSIONA PER COLLEGARTI</div>
+              <div className="qr-code">
+                <QRCodeSVG
+                  value={`http://${address}/`}
+                  size={132}
+                  level="M"
+                  bgColor="#ffffff"
+                  fgColor="#0f4c81"
+                />
+              </div>
+              <div className="qr-hint">
+                Inquadra il QR con il dispositivo mobile.
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
