@@ -54,13 +54,41 @@ const IMAGE_EXTENSIONS: &[(&str, &str)] = &[
 ];
 const MAX_TEXT_PREVIEW_BYTES: usize = 50_000;
 const MAX_IMAGE_PREVIEW_BYTES: u64 = 12 * 1024 * 1024;
+// #[tauri::command]
+// fn apri_cartella(app: tauri::AppHandle) -> Result<(), String> {
+//     // 1. Otteniamo il percorso dinamico usando la tua funzione web_dir
+//     let cartella = web_dir(&app)?; 
+//     let percorso = cartella.to_string_lossy().to_string();
+
+//     // 2. Apriamo il file manager in base al sistema operativo
+//     #[cfg(target_os = "windows")]
+//     Command::new("explorer")
+//         .arg(&percorso)
+//         .spawn()
+//         .map_err(|e| e.to_string())?;
+
+//     #[cfg(target_os = "macos")]
+//     Command::new("open")
+//         .arg(&percorso)
+//         .spawn()
+//         .map_err(|e| e.to_string())?;
+
+//     #[cfg(target_os = "linux")]
+//     Command::new("xdg-open")
+//         .arg(&percorso)
+//         .spawn()
+//         .map_err(|e| e.to_string())?;
+
+//     Ok(())
+// }
 #[tauri::command]
 fn apri_cartella(app: tauri::AppHandle) -> Result<(), String> {
-    // 1. Otteniamo il percorso dinamico usando la tua funzione web_dir
-    let cartella = web_dir(&app)?; 
+    // Cartella dei file ricevuti dal telefono (viene creata se non esiste)
+    let cartella = received_dir(&app)?;
     let percorso = cartella.to_string_lossy().to_string();
+    // Tolgo l'eventuale prefisso "verbatim" di Windows, che Explorer potrebbe non aprire
+    let percorso = percorso.strip_prefix(r"\\?\").unwrap_or(&percorso).to_string();
 
-    // 2. Apriamo il file manager in base al sistema operativo
     #[cfg(target_os = "windows")]
     Command::new("explorer")
         .arg(&percorso)
@@ -81,7 +109,6 @@ fn apri_cartella(app: tauri::AppHandle) -> Result<(), String> {
 
     Ok(())
 }
-
 fn get_local_ip() -> io::Result<String> {
     let socket = UdpSocket::bind("0.0.0.0:0")?;
     socket.connect("8.8.8.8:80")?;
@@ -125,11 +152,18 @@ fn web_dir(app: &AppHandle) -> Result<PathBuf, String> {
     }
 }
 
+// fn make_c_string(path: &PathBuf) -> Result<std::ffi::CString, String> {
+//     std::ffi::CString::new(path.to_string_lossy().as_bytes())
+//         .map_err(|_| format!("Percorso non valido: {}", path.display()))
+// }
 fn make_c_string(path: &PathBuf) -> Result<std::ffi::CString, String> {
-    std::ffi::CString::new(path.to_string_lossy().as_bytes())
+    let s = path.to_string_lossy();
+    // Tauri su Windows può restituire percorsi "verbatim" (\\?\C:\...):
+    // in quel formato '/' non viene convertito in '\', quindi tolgo il prefisso.
+    let clean: &str = s.strip_prefix(r"\\?\").unwrap_or(s.as_ref());
+    std::ffi::CString::new(clean.as_bytes())
         .map_err(|_| format!("Percorso non valido: {}", path.display()))
 }
-
 #[tauri::command]
 fn start_server(app: AppHandle, state: tauri::State<AppState>, port: Option<u16>) -> Result<String, String> {
     let port = port.unwrap_or(PORT);
